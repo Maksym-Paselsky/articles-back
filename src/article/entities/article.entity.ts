@@ -24,7 +24,7 @@ export class Article {
   @Prop()
   country: string;
   @Prop()
-  published_at: string;
+  published_at: Date;
   @Prop({ default: false })
   visible: boolean;
 }

@@ -1,5 +1,5 @@
 import { IsDate, IsString, IsUrl, MinLength } from 'class-validator';
-
+import { Transform } from 'class-transformer';
 export class CreateArticleDto {
   @IsString()
   author: string;
@@ -22,7 +22,7 @@ export class CreateArticleDto {
   language: string;
   @IsString()
   country: string;
-  @IsString()
   @IsDate()
-  published_at: string;
+  @Transform(({ value }) => new Date(value))
+  published_at: Date;
 }
