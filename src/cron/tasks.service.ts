@@ -8,7 +8,7 @@ export class TasksService {
 
   private readonly logger = new Logger(TasksService.name);
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron(CronExpression.EVERY_5_HOURS)
   importArticles() {
     this.logger.debug('Importing articles');
     this.httpService.axiosRef
