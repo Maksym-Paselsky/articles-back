@@ -25,6 +25,8 @@ export class Article {
   country: string;
   @Prop()
   published_at: string;
+  @Prop({ default: false })
+  visible: boolean;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
