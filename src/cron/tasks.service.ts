@@ -1,22 +1,35 @@
+import { ArticleService } from './../article/article.service';
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { Model } from 'mongoose';
+import { Article } from 'src/article/entities/article.entity';
 
 @Injectable()
 export class TasksService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    @InjectModel(Article.name) private articleModel: Model<Article>,
+    private readonly httpService: HttpService,
+  ) {}
 
   private readonly logger = new Logger(TasksService.name);
 
   @Cron(CronExpression.EVERY_5_HOURS)
-  importArticles() {
+  async importArticles() {
     this.logger.debug('Importing articles');
-    this.httpService.axiosRef
+    await this.httpService.axiosRef
       .get(
         `http://api.mediastack.com/v1/news?access_key=${process.env.MEDIASTACK_API_KEY}&country=ua&keywords=ukraine russia war`,
       )
-      .then((res) => {
-        console.log(res.data);
+      .then(async (res) => {
+        const articles = res.data.data as Article[];
+        try {
+          await this.articleModel.insertMany(articles);
+          this.logger.debug(`${articles.length} articles imported`);
+        } catch (e) {
+          this.logger.error(e);
+        }
       });
   }
 }

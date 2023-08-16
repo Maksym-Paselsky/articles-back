@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { HttpModule } from '@nestjs/axios';
-import { Article } from 'src/article/entities/article.entity';
-import { ArticleModule } from 'src/article/article.module';
+import { Article, ArticleSchema } from 'src/article/entities/article.entity';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -10,7 +10,7 @@ import { ArticleModule } from 'src/article/article.module';
       timeout: 5000,
       maxRedirects: 5,
     }),
-    ArticleModule,
+    MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }]),
   ],
   controllers: [],
   providers: [TasksService],
