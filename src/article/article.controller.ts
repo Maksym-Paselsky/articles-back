@@ -18,7 +18,7 @@ import { Public } from 'src/auth/auth.decorator';
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
-  @UseGuards(AuthGuard)
+  @Public()
   @Post()
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articleService.create(createArticleDto);
@@ -36,11 +36,13 @@ export class ArticleController {
     return this.articleService.findOne(id);
   }
 
+  @Public()
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
     return this.articleService.update(id, updateArticleDto);
   }
 
+  @Public()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articleService.remove(id);
