@@ -1,7 +1,14 @@
-import { IsDate, IsString, IsUrl, MinLength } from 'class-validator';
+import {
+  IsDate,
+  IsOptional,
+  IsString,
+  IsUrl,
+  MinLength,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 export class CreateArticleDto {
   @IsString()
+  @IsOptional()
   author: string;
   @IsString()
   title: string;
@@ -19,10 +26,13 @@ export class CreateArticleDto {
   @IsString()
   category: string;
   @IsString()
+  @IsOptional()
   language: string;
   @IsString()
+  @IsOptional()
   country: string;
   @IsDate()
+  @IsOptional()
   @Transform(({ value }) => new Date(value))
   published_at: Date;
 }
