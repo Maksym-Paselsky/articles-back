@@ -17,6 +17,7 @@ export class CreateArticleDto {
   description: string;
   @IsString()
   @IsUrl()
+  @IsOptional()
   url: string;
   @IsString()
   source: string;
