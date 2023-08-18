@@ -35,5 +35,5 @@ export class CreateArticleDto {
   @IsDate()
   @IsOptional()
   @Transform(({ value }) => new Date(value))
-  published_at: Date;
+  published_at: Date = new Date();
 }
