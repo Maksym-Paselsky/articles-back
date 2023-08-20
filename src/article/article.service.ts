@@ -46,7 +46,7 @@ export class ArticleService {
       .limit(pagination.limit)
       .exec();
 
-    const total = await this.articleModel.countDocuments().exec();
+    const total = await this.articleModel.countDocuments(query).exec();
     return {
       data,
       total,
