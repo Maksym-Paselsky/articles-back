@@ -12,11 +12,12 @@ import {
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+
 import { Public } from 'src/auth/auth.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationParams, UsePagination } from 'src/decorators/usePagination';
 import { SearchParams, UseSearch } from 'src/decorators/useSearch';
+import { FilterParams, UseFilter } from 'src/decorators/useFilter';
 
 @ApiTags('Artcile')
 @Controller('article')
@@ -28,8 +29,9 @@ export class ArticleController {
   findAll(
     @UseSearch() search: SearchParams,
     @UsePagination() pagination: PaginationParams,
+    @UseFilter() filters: FilterParams,
   ) {
-    return this.articleService.findAll(search, pagination);
+    return this.articleService.findAll(search, pagination, filters);
   }
 
   @Public()

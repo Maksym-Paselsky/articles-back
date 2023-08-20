@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { Article } from './entities/article.entity';
 import { Logger } from '@nestjs/common';
 import { SearchParams } from 'src/decorators/useSearch';
+import { FilterParams } from 'src/decorators/useFilter';
 
 @Injectable()
 export class ArticleService {
@@ -24,10 +25,13 @@ export class ArticleService {
   async findAll(
     search: SearchParams,
     pagination: PaginationParams,
+    filter: FilterParams,
   ): Promise<PaginationResult<Article>> {
     if (!search.search) {
       const data = await this.articleModel
-        .find()
+        .find({
+          category: { $regex: filter.category, $options: 'i' },
+        })
         .skip(pagination.offset * pagination.limit)
         .limit(pagination.limit)
         .exec();
@@ -41,6 +45,7 @@ export class ArticleService {
     } else {
       const data = await this.articleModel
         .find({
+          category: { $regex: filter.category, $options: 'i' },
           title: { $regex: search.search, $options: 'i' },
           $or: [
             { description: { $regex: search.search, $options: 'i' } },
