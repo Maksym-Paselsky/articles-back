@@ -7,17 +7,17 @@ export type ArticleDocument = HydratedDocument<Article>;
 export class Article {
   @Prop()
   author: string;
-  @Prop()
+  @Prop({ type: String, text: true })
   title: string;
-  @Prop()
+  @Prop({ type: String, text: true })
   description: string;
   @Prop()
   url: string;
-  @Prop()
+  @Prop({ type: String, text: true })
   source: string;
   @Prop()
   image: string;
-  @Prop()
+  @Prop({ type: String, text: true })
   category: string;
   @Prop()
   language: string;

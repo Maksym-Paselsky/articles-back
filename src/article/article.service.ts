@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Article } from './entities/article.entity';
 import { Logger } from '@nestjs/common';
+import e from 'express';
 @Injectable()
 export class ArticleService {
   constructor(
@@ -18,8 +19,15 @@ export class ArticleService {
     return await createdArticle.save();
   }
 
-  async findAll(): Promise<Article[]> {
-    return await this.articleModel.find().exec();
+  async findAll(search: string): Promise<Article[]> {
+    if (search) {
+      return await this.articleModel
+        .find({ $text: { $search: search } })
+
+        .exec();
+    } else {
+      return await this.articleModel.find().exec();
+    }
   }
 
   async findOne(id: string) {
