@@ -32,7 +32,12 @@ export class ArticleService {
         .limit(pagination.limit)
         .exec();
       const total = await this.articleModel.countDocuments().exec();
-      return { data, total, offset: pagination.offset };
+      return {
+        data,
+        total,
+        limit: pagination.limit,
+        offset: pagination.offset,
+      };
     } else {
       const data = await this.articleModel
         .find({
@@ -47,7 +52,12 @@ export class ArticleService {
         .limit(pagination.limit)
         .exec();
       const total = await this.articleModel.countDocuments().exec();
-      return { data, total, offset: pagination.offset };
+      return {
+        data,
+        total,
+        limit: pagination.limit,
+        offset: pagination.offset,
+      };
     }
   }
 
