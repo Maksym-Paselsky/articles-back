@@ -25,14 +25,23 @@ export class ArticleService {
     search: SearchParams,
     pagination: PaginationParams,
   ): Promise<PaginationResult<Article>> {
-    const data = await this.articleModel
-
-      .find({ $text: { $search: search.search } })
-      .skip(pagination.offset)
-      .limit(pagination.limit)
-      .exec();
-    const total = await this.articleModel.countDocuments().exec();
-    return { data, total, offset: pagination.offset };
+    if (!search.search) {
+      const data = await this.articleModel
+        .find()
+        .skip(pagination.offset)
+        .limit(pagination.limit)
+        .exec();
+      const total = await this.articleModel.countDocuments().exec();
+      return { data, total, offset: pagination.offset };
+    } else {
+      const data = await this.articleModel
+        .find({ $text: { $search: search.search } })
+        .skip(pagination.offset)
+        .limit(pagination.limit)
+        .exec();
+      const total = await this.articleModel.countDocuments().exec();
+      return { data, total, offset: pagination.offset };
+    }
   }
 
   async findOne(id: string) {

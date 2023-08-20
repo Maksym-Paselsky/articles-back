@@ -7,7 +7,7 @@ export interface SearchParams {
 export const UseSearch = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): SearchParams => {
     const request = ctx.switchToHttp().getRequest();
-    const search = request.query.s || '';
+    const search = request.query.s;
     return { search };
   },
 );
