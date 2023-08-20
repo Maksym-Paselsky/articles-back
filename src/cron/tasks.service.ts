@@ -20,7 +20,7 @@ export class TasksService {
     this.logger.debug('Importing articles');
     await this.httpService.axiosRef
       .get(
-        `http://api.mediastack.com/v1/news?access_key=${process.env.MEDIASTACK_API_KEY}&country=ua&keywords=ukraine russia war`,
+        `http://api.mediastack.com/v1/news?access_key=${process.env.MEDIASTACK_API_KEY}&limit=100&country=ua&keywords=ukraine russia war`,
       )
       .then(async (res) => {
         const articles = res.data.data as Article[];

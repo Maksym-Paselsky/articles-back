@@ -28,7 +28,7 @@ export class ArticleService {
     if (!search.search) {
       const data = await this.articleModel
         .find()
-        .skip(pagination.offset)
+        .skip(pagination.offset * pagination.limit)
         .limit(pagination.limit)
         .exec();
       const total = await this.articleModel.countDocuments().exec();
@@ -48,7 +48,7 @@ export class ArticleService {
             { source: { $regex: search.search, $options: 'i' } },
           ],
         })
-        .skip(pagination.offset)
+        .skip(pagination.offset * pagination.limit)
         .limit(pagination.limit)
         .exec();
       const total = await this.articleModel.countDocuments().exec();
