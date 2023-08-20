@@ -1,6 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export interface FilterParams {
+export class FilterParams {
+  @ApiProperty({
+    required: false,
+    description: 'Filter by category use comma separated values',
+    type: String,
+    example: 'category1,category2',
+  })
   category: [string];
 }
 

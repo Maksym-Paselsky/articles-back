@@ -1,6 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
-export interface SearchParams {
+export class SearchParams {
+  @ApiProperty({ required: false })
   search: string;
 }
 

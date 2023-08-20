@@ -1,7 +1,10 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
-export interface PaginationParams {
+export class PaginationParams {
+  @ApiProperty({ required: false })
   limit: number;
+  @ApiProperty({ required: false })
   offset: number;
 }
 
