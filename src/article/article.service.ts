@@ -35,7 +35,14 @@ export class ArticleService {
       return { data, total, offset: pagination.offset };
     } else {
       const data = await this.articleModel
-        .find({ $text: { $search: search.search } })
+        .find({
+          title: { $regex: search.search, $options: 'i' },
+          $or: [
+            { description: { $regex: search.search, $options: 'i' } },
+            { category: { $regex: search.search, $options: 'i' } },
+            { source: { $regex: search.search, $options: 'i' } },
+          ],
+        })
         .skip(pagination.offset)
         .limit(pagination.limit)
         .exec();
