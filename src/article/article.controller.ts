@@ -15,6 +15,8 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Public } from 'src/auth/auth.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PaginationParams, UsePagination } from 'src/decorators/usePagination';
+import { SearchParams, UseSearch } from 'src/decorators/useSearch';
 
 @ApiTags('Artcile')
 @Controller('article')
@@ -23,8 +25,11 @@ export class ArticleController {
 
   @Public()
   @Get()
-  findAll(@Query('s') search: string) {
-    return this.articleService.findAll(search);
+  findAll(
+    @UseSearch() search: SearchParams,
+    @UsePagination() pagination: PaginationParams,
+  ) {
+    return this.articleService.findAll(search, pagination);
   }
 
   @Public()

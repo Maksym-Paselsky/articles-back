@@ -1,3 +1,4 @@
+import { PaginationParams } from './../decorators/usePagination';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -5,7 +6,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Article } from './entities/article.entity';
 import { Logger } from '@nestjs/common';
-import e from 'express';
+import { SearchParams } from 'src/decorators/useSearch';
+
 @Injectable()
 export class ArticleService {
   constructor(
@@ -19,15 +21,18 @@ export class ArticleService {
     return await createdArticle.save();
   }
 
-  async findAll(search: string): Promise<Article[]> {
-    if (search) {
-      return await this.articleModel
-        .find({ $text: { $search: search } })
+  async findAll(
+    search: SearchParams,
+    pagination: PaginationParams,
+  ): Promise<PaginationResult<Article>> {
+    const data = await this.articleModel
 
-        .exec();
-    } else {
-      return await this.articleModel.find().exec();
-    }
+      .find({ $text: { $search: search.search } })
+      .skip(pagination.offset)
+      .limit(pagination.limit)
+      .exec();
+    const total = await this.articleModel.countDocuments().exec();
+    return { data, total, offset: pagination.offset };
   }
 
   async findOne(id: string) {
