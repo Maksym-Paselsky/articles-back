@@ -27,43 +27,32 @@ export class ArticleService {
     pagination: PaginationParams,
     filter: FilterParams,
   ): Promise<PaginationResult<Article>> {
-    if (!search.search) {
-      const data = await this.articleModel
-        .find({
-          category: { $in: filter.category },
-        })
-        .skip(pagination.offset * pagination.limit)
-        .limit(pagination.limit)
-        .exec();
-      const total = await this.articleModel.countDocuments().exec();
-      return {
-        data,
-        total,
-        limit: pagination.limit,
-        offset: pagination.offset,
-      };
-    } else {
-      const data = await this.articleModel
-        .find({
-          category: { $in: filter.category },
-          title: { $regex: search.search, $options: 'i' },
-          $or: [
-            { description: { $regex: search.search, $options: 'i' } },
-            { category: { $regex: search.search, $options: 'i' } },
-            { source: { $regex: search.search, $options: 'i' } },
-          ],
-        })
-        .skip(pagination.offset * pagination.limit)
-        .limit(pagination.limit)
-        .exec();
-      const total = await this.articleModel.countDocuments().exec();
-      return {
-        data,
-        total,
-        limit: pagination.limit,
-        offset: pagination.offset,
-      };
+    let query = {} as any;
+
+    if (search.search) {
+      query.title = { $regex: search.search, $options: 'i' };
+      query.$or = [
+        { description: { $regex: search.search, $options: 'i' } },
+        { category: { $regex: search.search, $options: 'i' } },
+        { source: { $regex: search.search, $options: 'i' } },
+      ];
     }
+    if (filter.category.length > 0) {
+      query.category = { $in: filter.category };
+    }
+    const data = await this.articleModel
+      .find(query)
+      .skip(pagination.offset * pagination.limit)
+      .limit(pagination.limit)
+      .exec();
+
+    const total = await this.articleModel.countDocuments().exec();
+    return {
+      data,
+      total,
+      limit: pagination.limit,
+      offset: pagination.offset,
+    };
   }
 
   async findCategories(): Promise<string[]> {

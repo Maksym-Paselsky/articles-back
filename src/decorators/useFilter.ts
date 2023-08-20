@@ -7,7 +7,9 @@ export interface FilterParams {
 export const UseFilter = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): FilterParams => {
     const request = ctx.switchToHttp().getRequest();
-    const category = request.query.category.split(',') || '';
+    const category = request.query.category
+      ? request.query.category.split(',')
+      : [];
     return { category };
   },
 );
