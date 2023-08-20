@@ -30,7 +30,7 @@ export class ArticleService {
     if (!search.search) {
       const data = await this.articleModel
         .find({
-          category: { $regex: filter.category, $options: 'i' },
+          category: { $in: filter.category },
         })
         .skip(pagination.offset * pagination.limit)
         .limit(pagination.limit)
@@ -45,7 +45,7 @@ export class ArticleService {
     } else {
       const data = await this.articleModel
         .find({
-          category: { $regex: filter.category, $options: 'i' },
+          category: { $in: filter.category },
           title: { $regex: search.search, $options: 'i' },
           $or: [
             { description: { $regex: search.search, $options: 'i' } },
@@ -66,12 +66,8 @@ export class ArticleService {
     }
   }
 
-  async findOne(id: string) {
-    try {
-      return await this.articleModel.findById(id).exec();
-    } catch (error) {
-      throw new NotFoundException('Could not find article.');
-    }
+  async findCategories(): Promise<string[]> {
+    return await this.articleModel.distinct('category').exec();
   }
 
   async update(id: string, updateArticleDto: UpdateArticleDto) {

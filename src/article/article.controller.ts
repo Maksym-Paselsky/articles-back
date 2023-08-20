@@ -35,9 +35,9 @@ export class ArticleController {
   }
 
   @Public()
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articleService.findOne(id);
+  @Get('categories')
+  findCategories() {
+    return this.articleService.findCategories();
   }
 
   @ApiBearerAuth()
